@@ -10,19 +10,14 @@ import android.text.TextUtils;
 import java.lang.reflect.Method;
 import java.util.List;
 
-/**
- * Name: 吴庆森
- * Date: 2019/9/5
- * Mailbox: 1243411677@qq.com
- * Describe:WIFI管理
- */
-public class MyWifiManager {
+
+public class WifiManager {
 
 
     /**
      * 开始扫描wifi
      */
-    public static void startScanWifi(WifiManager manager) {
+    public static void startScanWifi(android.net.wifi.WifiManager manager) {
         if (manager != null) {
             manager.startScan();
         }
@@ -32,7 +27,7 @@ public class MyWifiManager {
     /**
      * 获取wifi列表
      */
-    public static List<ScanResult> getWifiList(WifiManager mWifiManager) {
+    public static List<ScanResult> getWifiList(android.net.wifi.WifiManager mWifiManager) {
         return mWifiManager.getScanResults();
     }
 
@@ -40,7 +35,7 @@ public class MyWifiManager {
     /**
      * 保存网络
      */
-    public static void saveNetworkByConfig(WifiManager manager, WifiConfiguration config) {
+    public static void saveNetworkByConfig(android.net.wifi.WifiManager manager, WifiConfiguration config) {
         if (manager == null) {
             return;
         }
@@ -59,7 +54,7 @@ public class MyWifiManager {
     /**
      * 忘记网络
      */
-    public static void forgetNetwork(WifiManager manager, int networkId) {
+    public static void forgetNetwork(android.net.wifi.WifiManager manager, int networkId) {
         if (manager == null) {
             return;
         }
@@ -78,7 +73,7 @@ public class MyWifiManager {
     /**
      * 断开连接
      */
-    public static boolean disconnectNetwork(WifiManager manager) {
+    public static boolean disconnectNetwork(android.net.wifi.WifiManager manager) {
         return manager != null && manager.disconnect();
     }
 
@@ -87,7 +82,7 @@ public class MyWifiManager {
      * 获取当前wifi名字
      * @return
      */
-    public static String getWiFiName(WifiManager manager) {
+    public static String getWiFiName(android.net.wifi.WifiManager manager) {
         WifiInfo wifiInfo = manager.getConnectionInfo();
         return wifiInfo.getSSID();
     }
@@ -95,7 +90,7 @@ public class MyWifiManager {
     /**
      * 获取wifi加密方式
      */
-    public static String getEncrypt(WifiManager mWifiManager, ScanResult scanResult) {
+    public static String getEncrypt(android.net.wifi.WifiManager mWifiManager, ScanResult scanResult) {
         if (mWifiManager != null) {
             String capabilities = scanResult.capabilities;
             if (!TextUtils.isEmpty(capabilities)) {
@@ -114,7 +109,7 @@ public class MyWifiManager {
     /**
      * 是否开启wifi，没有的话打开wifi
      */
-    public static boolean openWifi(WifiManager mWifiManager) {
+    public static boolean openWifi(android.net.wifi.WifiManager mWifiManager) {
         boolean bRet = true;
         if (!mWifiManager.isWifiEnabled()) {
             bRet = mWifiManager.setWifiEnabled(true);
@@ -124,7 +119,7 @@ public class MyWifiManager {
     /**
      * close wifi
      */
-    public static boolean closeWifi(WifiManager mWifiManager) {
+    public static boolean closeWifi(android.net.wifi.WifiManager mWifiManager) {
         boolean bRet = true;
         if (mWifiManager.isWifiEnabled()) {
             bRet = mWifiManager.setWifiEnabled(false);
@@ -132,8 +127,8 @@ public class MyWifiManager {
         return bRet;
     }
 
-    @SuppressLint("WifiManagerLeak")
-    public static void connectWifi(WifiManager wifiManager, String wifiName, String password, String type) {
+
+    public static void connectWifi(android.net.wifi.WifiManager wifiManager, String wifiName, String password, String type) {
         // 1、注意热点和密码均包含引号，此处需要需要转义引号
         String ssid = "\"" + wifiName + "\"";
         String psd = "\"" + password + "\"";

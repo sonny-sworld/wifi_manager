@@ -13,38 +13,39 @@ import java.util.List;
 
 /**
  */
-public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MyViewHolder> {
+public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.WifiViewHolder> {
     private List<WifiListBean> wifiListBeanList;
 
     public interface OnItemClickListener {
         void onItemClick(View view, int position);
     }
 
-    public MainAdapter.OnItemClickListener mOnItemClickListerer;
+    public WifiListAdapter.OnItemClickListener mOnItemClickListerer;
 
-    public void setmOnItemClickListerer(MainAdapter.OnItemClickListener listerer) {
+    public void setmOnItemClickListerer(WifiListAdapter.OnItemClickListener listerer) {
         this.mOnItemClickListerer = listerer;
     }
 
-    public MainAdapter(List<WifiListBean> wifiListBeanList) {
+    public WifiListAdapter(List<WifiListBean> wifiListBeanList) {
         this.wifiListBeanList = wifiListBeanList;
     }
 
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public WifiViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_main, parent, false);
-        MyViewHolder holder = new MyViewHolder(view);
+        WifiViewHolder holder = new WifiViewHolder(view);
         return holder;
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, final int position) {
+    public void onBindViewHolder(WifiViewHolder holder, int position) {
         holder.tv_name.setText("wifi name：" + wifiListBeanList.get(position).getName());
         holder.tv_encrypt.setText("encryption type：" + wifiListBeanList.get(position).getEncrypt());
+        final int i = position;
         holder.btn_link.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mOnItemClickListerer.onItemClick(v, position);
+                mOnItemClickListerer.onItemClick(v, i);
             }
         });
     }
@@ -54,12 +55,12 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MyViewHolder> 
         return wifiListBeanList.size();
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder {
+    static class WifiViewHolder extends RecyclerView.ViewHolder {
 
         TextView tv_name, tv_encrypt;
         Button btn_link;
 
-        public MyViewHolder(View view) {
+        public WifiViewHolder(View view) {
             super(view);
             tv_name = view.findViewById(R.id.tv_name);
             tv_encrypt = view.findViewById(R.id.tv_encrypt);
