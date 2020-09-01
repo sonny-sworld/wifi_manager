@@ -12,10 +12,6 @@ import com.wifidemoSonny.bean.WifiListBean;
 import java.util.List;
 
 /**
- * Name: 吴庆森
- * Date: 2019/9/4
- * Mailbox: 1243411677@qq.com
- * Describe:
  */
 public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MyViewHolder> {
     private List<WifiListBean> wifiListBeanList;

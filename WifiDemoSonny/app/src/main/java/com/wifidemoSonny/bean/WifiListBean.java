@@ -1,11 +1,6 @@
 package com.wifidemoSonny.bean;
 
-/**
- * Name: 吴庆森
- * Date: 2019/9/5
- * Mailbox: 1243411677@qq.com
- * Describe:
- */
+
 public class WifiListBean {
 
     private String name;
