@@ -134,8 +134,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 wifiListBeanList.clear();
 
-                //开启wifi
-                WifiManager.openWifi(mWifiManager);
+//                //开启wifi
+//                WifiManager.openWifi(mWifiManager);
                 //获取到wifi列表
                 mScanResultList = WifiManager.getWifiList(mWifiManager);
                 for (int i = 0; i < mScanResultList.size(); i++) {
