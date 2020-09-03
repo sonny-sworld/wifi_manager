@@ -12,6 +12,7 @@ import com.wifidemoSonny.bean.WifiListBean;
 import java.util.List;
 
 /**
+ * @author sgao
  */
 public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.WifiViewHolder> {
     private List<WifiListBean> wifiListBeanList;

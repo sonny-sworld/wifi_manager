@@ -13,7 +13,6 @@ public class WifiManager {
 
 
     /**
-     * 开始扫描wifi
      */
     public static void startScanWifi(android.net.wifi.WifiManager manager) {
         if (manager != null) {
@@ -23,7 +22,6 @@ public class WifiManager {
 
 
     /**
-     * 获取wifi列表
      */
     public static List<ScanResult> getWifiList(android.net.wifi.WifiManager mWifiManager) {
         return mWifiManager.getScanResults();
@@ -31,7 +29,6 @@ public class WifiManager {
 
 
     /**
-     * 保存网络
      */
     public static void saveNetworkByConfig(android.net.wifi.WifiManager manager, WifiConfiguration config) {
         if (manager == null) {
@@ -50,7 +47,6 @@ public class WifiManager {
 
 
     /**
-     * 忘记网络
      */
     public static void forgetNetwork(android.net.wifi.WifiManager manager, int networkId) {
         if (manager == null) {
@@ -69,7 +65,6 @@ public class WifiManager {
 
 
     /**
-     * 断开连接
      */
     public static boolean disconnectNetwork(android.net.wifi.WifiManager manager) {
         return manager != null && manager.disconnect();
@@ -77,7 +72,6 @@ public class WifiManager {
 
 
     /**
-     * 获取当前wifi名字
      * @return
      */
     public static String getWiFiName(android.net.wifi.WifiManager manager) {
@@ -86,7 +80,6 @@ public class WifiManager {
     }
 
     /**
-     * 获取wifi加密方式
      */
     public static String getEncrypt(android.net.wifi.WifiManager mWifiManager, ScanResult scanResult) {
         if (mWifiManager != null) {
@@ -97,15 +90,14 @@ public class WifiManager {
                 } else if (capabilities.contains("WEP") || capabilities.contains("wep")) {
                     return "WEP";
                 } else {
-                    return "没密码";
+                    return "no password";
                 }
             }
         }
-        return "获取失败";
+        return "failed";
     }
 
     /**
-     * 是否开启wifi，没有的话打开wifi
      */
     public static boolean openWifi(android.net.wifi.WifiManager mWifiManager) {
         boolean bRet = true;
@@ -127,30 +119,30 @@ public class WifiManager {
 
 
     public static void connectWifi(android.net.wifi.WifiManager wifiManager, String wifiName, String password, String type) {
-        // 1、注意热点和密码均包含引号，此处需要需要转义引号
+
         String ssid = "\"" + wifiName + "\"";
         String psd = "\"" + password + "\"";
 
-        //2、配置wifi信息
+
         WifiConfiguration conf = new WifiConfiguration();
         conf.SSID = ssid;
         switch (type) {
             case "WEP":
-                // 加密类型为WEP
+
                 conf.wepKeys[0] = psd;
                 conf.wepTxKeyIndex = 0;
                 conf.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
                 conf.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP40);
                 break;
             case "WPA":
-                // 加密类型为WPA
+
                 conf.preSharedKey = psd;
                 break;
             default:
-                //无密码
+
                 conf.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
         }
-        //3、链接wifi
+
         wifiManager.addNetwork(conf);
         List<WifiConfiguration> list = wifiManager.getConfiguredNetworks();
         for (WifiConfiguration i : list) {

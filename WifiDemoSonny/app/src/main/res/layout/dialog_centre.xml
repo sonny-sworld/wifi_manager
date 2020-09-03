@@ -39,7 +39,7 @@
                 android:layout_below="@+id/tvName"
                 android:background="#FFFFFF"
                 android:gravity="center"
-                android:hint="输入密码，如果wifi没有密码，直接点击确定"
+                android:hint="input password，if no password，click confirm directly."
                 android:textSize="12sp"/>
 
             <TextView
@@ -48,7 +48,7 @@
                 android:layout_height="50dp"
                 android:layout_margin="10dp"
                 android:background="@color/colorPrimaryDark"
-                android:text="确定"
+                android:text="Confirm"
                 android:textColor="#FFFFFF"
                 android:gravity="center"
                 android:layout_below="@+id/et_password"/>

@@ -7,9 +7,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.NetworkInfo;
 import android.net.wifi.ScanResult;
+import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -24,16 +24,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.wifidemoSonny.bean.WifiListBean;
-import com.wifidemoSonny.utils.WifiManager;
 import com.wifidemoSonny.utils.PermissionsChecker;
+import com.wifidemoSonny.utils.WifiManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author sgao
+ */
 public class MainActivity extends AppCompatActivity {
-    private PermissionsChecker mPermissionsChecker; // 权限检测器
-    private final int RESULT_CODE_LOCATION = 0x001;
-    //定位权限,获取app内常用权限
+
     String[] permsLocation = {"android.permission.ACCESS_WIFI_STATE"
             , "android.permission.CHANGE_WIFI_STATE"
             , "android.permission.ACCESS_COARSE_LOCATION"
@@ -45,17 +46,16 @@ public class MainActivity extends AppCompatActivity {
     Button btnOpenWifi;
     WifiListAdapter adapter;
     private android.net.wifi.WifiManager mWifiManager;
-    private List<ScanResult> mScanResultList;//wifi列表
+    private List<ScanResult> mScanResultList;
     private List<WifiListBean> wifiListBeanList;
     private Dialog dialog;
-    private View inflate;
     private WifiBroadcastReceiver wifiReceiver;
     private TextView tv_wifiState;
 
     @Override
     protected void onResume() {
         super.onResume();
-        registerReceiverWifi();//监听wifi变化
+        registerReceiverWifi();
     }
 
     @Override
@@ -65,19 +65,18 @@ public class MainActivity extends AppCompatActivity {
         if (mWifiManager == null) {
             mWifiManager = (android.net.wifi.WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
         }
-        getPerMission();//权限
-        initView();//控件初始化
-        initClickListener();//获取wifi
-        setAdapter();//wifi列表
+        getPerMission();
+        initView();
+        initClickListener();
+        setAdapter();
     }
 
-    //监听wifi变化
     private void registerReceiverWifi() {
         wifiReceiver = new WifiBroadcastReceiver();
         IntentFilter filter = new IntentFilter();
-        filter.addAction(android.net.wifi.WifiManager.WIFI_STATE_CHANGED_ACTION);//监听wifi是开关变化的状态
-        filter.addAction(android.net.wifi.WifiManager.NETWORK_STATE_CHANGED_ACTION);//监听wifi连接状态
-        filter.addAction(android.net.wifi.WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);//监听wifi列表变化（开启一个热点或者关闭一个热点）
+        filter.addAction(android.net.wifi.WifiManager.WIFI_STATE_CHANGED_ACTION);
+        filter.addAction(android.net.wifi.WifiManager.NETWORK_STATE_CHANGED_ACTION);
+        filter.addAction(android.net.wifi.WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
         registerReceiver(wifiReceiver, filter);
     }
 
@@ -89,16 +88,16 @@ public class MainActivity extends AppCompatActivity {
         adapter.setmOnItemClickListerer(new WifiListAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                //连接wifi
                 showCentreDialog(wifiListBeanList.get(position).getName(), position);
             }
         });
     }
 
-    //获取权限
     private void getPerMission() {
-        mPermissionsChecker = new PermissionsChecker(MainActivity.this);
+
+        PermissionsChecker mPermissionsChecker = new PermissionsChecker(MainActivity.this);
         if (mPermissionsChecker.lacksPermissions(permsLocation)) {
+            int RESULT_CODE_LOCATION = 0x001;
             ActivityCompat.requestPermissions(MainActivity.this, permsLocation, RESULT_CODE_LOCATION);
         }
     }
@@ -133,10 +132,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 wifiListBeanList.clear();
-
-//                //开启wifi
-//                WifiManager.openWifi(mWifiManager);
-                //获取到wifi列表
                 mScanResultList = WifiManager.getWifiList(mWifiManager);
                 for (int i = 0; i < mScanResultList.size(); i++) {
                     WifiListBean wifiListBean = new WifiListBean();
@@ -158,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void showCentreDialog(final String wifiName, final int position) {
-        inflate = LayoutInflater.from(MainActivity.this).inflate(R.layout.dialog_centre, null);
+        View inflate = LayoutInflater.from(MainActivity.this).inflate(R.layout.dialog_centre, null);
         dialog = new Dialog(MainActivity.this, R.style.DialogCentre);
         dialog.setCanceledOnTouchOutside(true);
         dialog.setContentView(inflate);
@@ -219,11 +214,17 @@ public class MainActivity extends AppCompatActivity {
                         break;
                 }
             } else if (android.net.wifi.WifiManager.NETWORK_STATE_CHANGED_ACTION.equals(intent.getAction())) {
+
+//                ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+//                final Network network = connectivityManager.getActiveNetwork();
+//                final NetworkCapabilities nc = connectivityManager.getNetworkCapabilities(network);
+//                nc.hasTransport(NetworkCapabilities.TRANSPORT_WIFI);
+
                 NetworkInfo info = intent.getParcelableExtra(android.net.wifi.WifiManager.EXTRA_NETWORK_INFO);if (NetworkInfo.State.DISCONNECTED == info.getState()) {//wifi没连接上
                     tv_wifiState.append("\n connection：wifi not connected");
                 } else if (NetworkInfo.State.CONNECTED == info.getState()) {
                     tv_wifiState.append("\n connection：wifi already connected，wifi name：" + WifiManager.getWiFiName(mWifiManager));
-                } else if (NetworkInfo.State.CONNECTING == info.getState()) {
+                } else if (NetworkInfo.State.CONNECTING == info.getState()){
                     tv_wifiState.append("\n connection：wifi is connecting");
                 }
             } else if (android.net.wifi.WifiManager.SCAN_RESULTS_AVAILABLE_ACTION.equals(intent.getAction())) {
