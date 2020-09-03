@@ -1,6 +1,6 @@
 # wifi_manager
 
-3 Main functions:
+There are three Main functions:
 
 1. Open WIFI.
 2. Close WIFI.
