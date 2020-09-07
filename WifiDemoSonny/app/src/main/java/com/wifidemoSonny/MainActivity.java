@@ -27,8 +27,24 @@ import com.wifidemoSonny.bean.WifiListBean;
 import com.wifidemoSonny.utils.PermissionsChecker;
 import com.wifidemoSonny.utils.WifiManager;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.CookieHandler;
+import java.net.CookieManager;
+import java.net.CookiePolicy;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * @author sgao
@@ -50,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
     private List<WifiListBean> wifiListBeanList;
     private Dialog dialog;
     private WifiBroadcastReceiver wifiReceiver;
-    private TextView tv_wifiState;
+    private TextView tvWifiState;
 
     @Override
     protected void onResume() {
@@ -70,6 +86,8 @@ public class MainActivity extends AppCompatActivity {
         initClickListener();
         setAdapter();
     }
+
+
 
     private void registerReceiverWifi() {
         wifiReceiver = new WifiBroadcastReceiver();
@@ -108,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
 
         btnOpenWifi = findViewById(R.id.btnOpen);
         btnCloseWifi = findViewById(R.id.btnClose);
-        tv_wifiState = findViewById(R.id.tv_wifiState);
+        tvWifiState = findViewById(R.id.tv_wifiState);
         wifiListBeanList = new ArrayList<>();
         mScanResultList = new ArrayList<>();
     }
@@ -190,24 +208,24 @@ public class MainActivity extends AppCompatActivity {
                 switch (state) {
                     case android.net.wifi.WifiManager.WIFI_STATE_DISABLED: {
 
-                        tv_wifiState.append("\n status：wifi already closed");
+                        tvWifiState.append("\n status：wifi already closed");
                         break;
                     }
                     case android.net.wifi.WifiManager.WIFI_STATE_DISABLING: {
-                        tv_wifiState.append("\n status：wifi is closing");
+                        tvWifiState.append("\n status：wifi is closing");
                         break;
                     }
                     case android.net.wifi.WifiManager.WIFI_STATE_ENABLED: {
-                        tv_wifiState.append("\n status：wifi already opened");
+                        tvWifiState.append("\n status：wifi already opened");
                         break;
                     }
                     case android.net.wifi.WifiManager.WIFI_STATE_ENABLING: {
-                        tv_wifiState.append("\n status：wifi is opening");
+                        tvWifiState.append("\n status：wifi is opening");
                         break;
                     }
                     case android.net.wifi.WifiManager.WIFI_STATE_UNKNOWN: {
 
-                        tv_wifiState.append("\n status：wifi unknown status");
+                        tvWifiState.append("\n status：wifi unknown status");
                         break;
                     }
                     default:
@@ -221,11 +239,11 @@ public class MainActivity extends AppCompatActivity {
 //                nc.hasTransport(NetworkCapabilities.TRANSPORT_WIFI);
 
                 NetworkInfo info = intent.getParcelableExtra(android.net.wifi.WifiManager.EXTRA_NETWORK_INFO);if (NetworkInfo.State.DISCONNECTED == info.getState()) {//wifi没连接上
-                    tv_wifiState.append("\n connection：wifi not connected");
+                    tvWifiState.append("\n connection：wifi not connected");
                 } else if (NetworkInfo.State.CONNECTED == info.getState()) {
-                    tv_wifiState.append("\n connection：wifi already connected，wifi name：" + WifiManager.getWiFiName(mWifiManager));
+                    tvWifiState.append("\n connection：wifi already connected，wifi name：" + WifiManager.getWiFiName(mWifiManager));
                 } else if (NetworkInfo.State.CONNECTING == info.getState()){
-                    tv_wifiState.append("\n connection：wifi is connecting");
+                    tvWifiState.append("\n connection：wifi is connecting");
                 }
             } else if (android.net.wifi.WifiManager.SCAN_RESULTS_AVAILABLE_ACTION.equals(intent.getAction())) {
                 Log.e("=====", "wifi list changing");
